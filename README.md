@@ -175,6 +175,8 @@ The following api routes have already been implemented for you (**Make sure to d
 
 This renders the `index.html` file that will be used to interact with the backend
 
+### Freets
+
 #### `GET /api/freets` - Get all the freets
 
 **Returns**
@@ -239,6 +241,8 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` if the user is not the author of the freet
 - `400` if the new freet content is empty or a stream of empty spaces
 - `413` if the new freet content is more than 140 characters long
+
+### User
 
 #### `POST /api/users/session` - Sign in user
 
@@ -313,3 +317,153 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+
+### Follower
+
+#### `GET /api/follower-relation?follower=username` - Get all the people (followees) that a user follows
+
+**Returns**
+
+- An array of follower-followee relations where the follower is the user
+
+**Throws**
+
+- `400` if follower's username is not given
+- `404` if the follower is not a valid user
+
+#### `GET /api/follower-relation?followee=username` - Get all the people (followers) that follow a user
+
+**Returns**
+
+- An array of follower-followee relations where the followee is the user
+
+**Throws**
+
+- `400` if followee's username is not given
+- `404` if the followee is not a valid user
+
+#### `DELETE /api/follows/:followee?` - Unfollow a user
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the user is not currently following the followee or if the followee doesn't exist
+
+#### `POST /api/follows` - Follow a new user
+
+**Body**
+
+- `followee` _{string}_ - The followee's username
+
+**Returns**
+
+- A success message
+- An object with the created follower-followee relation details
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if the followee is empty or a stream of empty spaces or if user tries to follow themselves
+- `404` if the user is already following the followee or the followee doesn't exist
+
+### Endorse
+
+#### `POST /api/endorse` - Endorse a post
+
+**Body**
+
+- `postId` _{string}_ - The ID of the post the user is endorsing
+
+**Returns**
+
+- A success message
+- An object with the created endorsement details
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if the postId is empty or a stream of empty spaces 
+- `404` if the post doesn't exist
+
+#### `GET /api/endorse/:freetId?` - See the count of and users who endorsed post
+
+**Returns**
+
+- An array of the users who endorsed the post and the count of users
+
+**Throws**
+
+- `400` if the freetId is not given
+- `404` if the freet doesn't exist
+
+#### `DELETE /api/endorse/:freetId?` - Delete endorsement from freet
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the freet doesn't exist
+
+### Word Mask
+
+#### `GET /api/word-mask` - Get all of a user’s word masks
+
+**Returns**
+
+- An array of the user's Word Masks
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `POST /api/word-mask` - Create a new word mask pair
+
+**Body**
+
+- `censoredWord` _{string}_ - The word that the user wants to censor
+- `replacementWord` _{string}_ - The word that the user wants to use to replace the censored word
+
+**Returns**
+
+- A success message
+- An object with the created created Word Mask
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if the censoredWord is empty
+
+#### `PUT` /api/word-mask - Update a word mask pairing
+
+**Body**
+
+- `censoredWord` _{string}_ - The word that the user wants to censor
+- `replacementWord` _{string}_ - The word that the user wants to use to replace the censored word
+
+**Returns**
+
+- A success message
+- An object with the modified created Word Mask
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if the censoredWord is empty
+
+#### `DELETE /api/word-mask?wordMaskId=Id` - Delete a word mask pairing
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the word mask doesn't exist

@@ -320,7 +320,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 ### Follower
 
-#### `GET /api/follower-relation?follower=username` - Get all the people (followees) that a user follows
+#### `GET /api/follows?follower=username` - Get all the people (followees) that a user follows
 
 **Returns**
 
@@ -331,7 +331,7 @@ This renders the `index.html` file that will be used to interact with the backen
 - `400` if follower's username is not given
 - `404` if the follower is not a valid user
 
-#### `GET /api/follower-relation?followee=username` - Get all the people (followers) that follow a user
+#### `GET /api/follows?followee=username` - Get all the people (followers) that follow a user
 
 **Returns**
 

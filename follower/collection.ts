@@ -27,7 +27,7 @@ class FollowerCollection {
     });
     
     await follow.save();
-    return follow;
+    return (await follow.populate('followee')).populate('follower');
   }
 
   /**
@@ -51,7 +51,7 @@ class FollowerCollection {
    */
    static async findOne(followerId: Types.ObjectId | string, followeeUsername: string): Promise<Array<HydratedDocument<Follower>>> {
     const followee = await UserCollection.findOneByUsername(followeeUsername);
-    return FollowerModel.findOne({follower: followerId, followee: followee._id});
+    return FollowerModel.findOne({follower: followerId, followee: followee._id}).populate('followee').populate('follower');
   }
 
   /**
@@ -62,7 +62,7 @@ class FollowerCollection {
    */
    static async findAllFolloweesOfUsername(username: string): Promise<Array<HydratedDocument<Follower>>> {
     const user = await UserCollection.findOneByUsername(username);
-    return FollowerModel.find({follower: user._id});
+    return FollowerModel.find({follower: user._id}).populate('followee').populate('follower');
   }
 
   /**
@@ -73,7 +73,7 @@ class FollowerCollection {
    */
    static async findAllFollowersOfUsername(username: string): Promise<Array<HydratedDocument<Follower>>> {
     const user = await UserCollection.findOneByUsername(username);
-    return FollowerModel.find({followee: user._id});
+    return FollowerModel.find({followee: user._id}).populate('followee').populate('follower');
   }
 
   /**
@@ -94,7 +94,6 @@ class FollowerCollection {
     await FollowerModel.deleteMany({followeeId});
   }
 
-  // function for getting all the freets of the followees of a user?
   
 }
 

@@ -4,6 +4,7 @@ import FreetCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as freetValidator from '../freet/middleware';
 import * as util from './util';
+import WordMaskCollection from '../wordMask/collection';
 
 const router = express.Router();
 
@@ -34,8 +35,10 @@ router.get(
       return;
     }
 
+    const wordMasks = req.session.userId ? await WordMaskCollection.findAll(req.session.userId) : [];
+
     const allFreets = await FreetCollection.findAll();
-    const response = allFreets.map(util.constructFreetResponse);
+    const response = allFreets.map(freet => util.constructFreetResponse(freet, wordMasks));
     res.status(200).json(response);
   },
   [
@@ -43,7 +46,9 @@ router.get(
   ],
   async (req: Request, res: Response) => {
     const authorFreets = await FreetCollection.findAllByUsername(req.query.author as string);
-    const response = authorFreets.map(util.constructFreetResponse);
+    const wordMasks = req.session.userId ? await WordMaskCollection.findAll(req.session.userId) : [];
+
+    const response = authorFreets.map(freet => util.constructFreetResponse(freet, wordMasks));
     res.status(200).json(response);
   }
 );
@@ -68,10 +73,11 @@ router.post(
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const freet = await FreetCollection.addOne(userId, req.body.content);
+    const wordMasks = req.session.userId ? await WordMaskCollection.findAll(req.session.userId) : [];
 
     res.status(201).json({
       message: 'Your freet was created successfully.',
-      freet: util.constructFreetResponse(freet)
+      freet: util.constructFreetResponse(freet, wordMasks)
     });
   }
 );
@@ -124,9 +130,11 @@ router.put(
   ],
   async (req: Request, res: Response) => {
     const freet = await FreetCollection.updateOne(req.params.freetId, req.body.content);
+    const wordMasks = req.session.userId ? await WordMaskCollection.findAll(req.session.userId) : [];
+
     res.status(200).json({
       message: 'Your freet was updated successfully.',
-      freet: util.constructFreetResponse(freet)
+      freet: util.constructFreetResponse(freet, wordMasks)
     });
   }
 );

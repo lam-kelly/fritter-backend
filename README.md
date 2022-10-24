@@ -376,7 +376,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Body**
 
-- `postId` _{string}_ - The ID of the post the user is endorsing
+- `freetId` _{string}_ - The ID of the freet the user is endorsing
 
 **Returns**
 
@@ -386,19 +386,30 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
-- `400` if the postId is empty or a stream of empty spaces 
-- `404` if the post doesn't exist
+- `400` if the freetId is empty or a stream of empty spaces 
+- `404` if the freetId doesn't exist
 
-#### `GET /api/endorse/:freetId?` - See the count of and users who endorsed post
+#### `GET /api/endorse?freet=freetId` - See the users who endorsed a specific freet
 
 **Returns**
 
-- An array of the users who endorsed the post and the count of users
+- An array of the endorse objects representing the endorsements of a specific freet
 
 **Throws**
 
 - `400` if the freetId is not given
 - `404` if the freet doesn't exist
+
+#### `GET /api/endorse?endorser=username` - See the freets that a user endorsed
+
+**Returns**
+
+- An array of the endorse objects representing the endorsements of a specific freet
+
+**Throws**
+
+- `400` if the endorserId is not given
+- `404` if the endorser doesn't exist
 
 #### `DELETE /api/endorse/:freetId?` - Delete endorsement from freet
 
@@ -439,12 +450,12 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 - `400` if the censoredWord is empty
+- `404` if the word mask pairing already exists
 
-#### `PUT` /api/word-mask - Update a word mask pairing
+#### `PUT` /api/word-mask/:wordMaskId? - Update a word mask pairing
 
 **Body**
 
-- `censoredWord` _{string}_ - The word that the user wants to censor
 - `replacementWord` _{string}_ - The word that the user wants to use to replace the censored word
 
 **Returns**
@@ -465,5 +476,5 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `403` if the user is not logged in
+- `403` if the user is not logged in or did not create the word mask
 - `404` if the word mask doesn't exist

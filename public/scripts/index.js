@@ -42,7 +42,15 @@ const formsAndHandlers = {
   'follow-user': followUser,
   'view-all-followers': viewAllFollowers,
   'view-all-followees': viewAllFollowees,
-  'unfollow-user': unfollowUser
+  'unfollow-user': unfollowUser,
+  'view-endorsements-by-user': viewEndorsementByUser,
+  'view-endorsements-of-freet': viewEndorsementsOfFreet,
+  'endorse-freet': endorseFreet,
+  'remove-endorsement-from-freet': removeEndorsement,
+  'view-word-masks': viewWordMasks,
+  'create-word-mask': createWordMask,
+  'delete-word-mask': deleteWordMask,
+  'edit-word-mask': editWordMask,
 };
 
 // Attach handlers to forms

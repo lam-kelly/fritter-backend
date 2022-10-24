@@ -1,6 +1,6 @@
 import type {HydratedDocument} from 'mongoose';
 import moment from 'moment';
-import type {Follower} from './model';
+import type {Follower, PopulatedFollower} from './model';
 
 // Update this if you add a property to the User type!
 type FollowerResponse = {
@@ -18,15 +18,18 @@ type FollowerResponse = {
  * @returns {FollowerResponse} - The user object without the password
  */
 const constructFollowerResponse = (follower: HydratedDocument<Follower>): FollowerResponse => {
-  const followerCopy: Follower = {
+  const followerCopy: PopulatedFollower = {
     ...follower.toObject({
       versionKey: false // Cosmetics; prevents returning of __v property
     })
   };
+  const usernameFollower = followerCopy.follower.username;
+  const usernameFollowee = followerCopy.followee.username;
+
   return {
     _id: followerCopy._id.toString(),
-    follower: followerCopy.follower.toString(),
-    followee: followerCopy.followee.toString()
+    follower: usernameFollower,
+    followee: usernameFollowee
   };
 };
 

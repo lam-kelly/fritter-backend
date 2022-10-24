@@ -3,10 +3,10 @@ import FollowerCollection from '../follower/collection';
 import UserCollection from '../user/collection';
 
 /**
- * Checks if the follower/followee is an account holder
+ * Checks if the follower is an account holder
  */
- const isUsernameExists = async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.query.follower && !req.query.followee) {
+ const isFollowerUsernameExists = async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.query.follower) {
         res.status(400).json({
             error: 'Provided username must be nonempty.'
         });
@@ -14,9 +14,31 @@ import UserCollection from '../user/collection';
     } 
 
     const follower = await UserCollection.findOneByUsername(req.query.follower as string);
+
+    if (!follower) {
+        res.status(404).json({
+          error: `A user with the provided username does not exist.`
+        });
+        return;
+    }
+  
+    next();
+  };
+
+/**
+ * Checks if the followee is an account holder
+ */
+ const isFolloweeUsernameExists = async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.query.followee) {
+        res.status(400).json({
+            error: 'Provided username must be nonempty.'
+        });
+        return;
+    } 
+
     const followee = await UserCollection.findOneByUsername(req.query.followee as string);
 
-    if (!follower && !followee) {
+    if (!followee) {
         res.status(404).json({
           error: `A user with the provided username does not exist.`
         });
@@ -99,7 +121,8 @@ const isFolloweeExists = async (req: Request, res: Response, next: NextFunction)
   };
   
 export {
-    isUsernameExists,
+    isFollowerUsernameExists,
+    isFolloweeUsernameExists,
     isFolloweeExists,
     isValidFollowee,
 }

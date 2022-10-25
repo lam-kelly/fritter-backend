@@ -452,7 +452,7 @@ This renders the `index.html` file that will be used to interact with the backen
 - `400` if the censoredWord is empty
 - `404` if the word mask pairing already exists
 
-#### `PUT` /api/word-mask/:wordMaskId? - Update a word mask pairing
+#### `PUT /api/word-mask/:wordMaskId?` - Update a word mask pairing
 
 **Body**
 
@@ -468,7 +468,7 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` if the user is not logged in
 - `400` if the censoredWord is empty
 
-#### `DELETE /api/word-mask?wordMaskId=Id` - Delete a word mask pairing
+#### `DELETE /api/word-mask/:wordMaskId?` - Delete a word mask pairing
 
 **Returns**
 
